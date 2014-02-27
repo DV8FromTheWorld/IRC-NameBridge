@@ -24,7 +24,7 @@ import net.minecraft.launchwrapper.IClassTransformer;
 public class ClassTransformer implements IClassTransformer
 {
     /**
-     * Called when <a href="https://github.com/MinecraftForge/FML" FML> is relaunching Minecraft.
+     * Called when <a href="https://github.com/MinecraftForge/FML">FML</a> is relaunching Minecraft.
      * This is called for every class in Minecraft that is loaded.
      * This means that if the Client is what is being loaded, this method will not process
      *  server only class, because they wont be loading.
@@ -46,13 +46,13 @@ public class ClassTransformer implements IClassTransformer
     {
         if (className.equals("hn"))
         {
-            System.out.println("[IRC Name Autocompleter] INSIDE OBFUSCATED ServerConfigurationManager TRANSFORMER ABOUT TO PATCH: " + className);
+            System.out.println("[IRC NameBridge] INSIDE OBFUSCATED ServerConfigurationManager TRANSFORMER ABOUT TO PATCH: " + className);
             return patchClassWithASM(className, classData, true);
         }
 
         if (className.equals("net.minecraft.server.management.ServerConfigurationManager"))
         {
-            System.out.println("[IRC Name Autocompleter] INSIDE ServerConfigurationManager TRANSFORMER ABOUT TO PATCH: " + className);
+            System.out.println("[IRC NameBridge] INSIDE ServerConfigurationManager TRANSFORMER ABOUT TO PATCH: " + className);
             return patchClassWithASM(className, classData, false);
         }
         return classData;
@@ -114,7 +114,7 @@ public class ClassTransformer implements IClassTransformer
                         new MethodInsnNode(INVOKESTATIC, "net/dv8tion/NameLoader",
                                 "loadNames", "([Ljava/lang/String;)[Ljava/lang/String;"));
 
-                System.out.println("[IRC Name Autocompleter] Patching Complete!");
+                System.out.println("[IRC NameBridge] Patching Complete!");
                 break;
             }
         }
