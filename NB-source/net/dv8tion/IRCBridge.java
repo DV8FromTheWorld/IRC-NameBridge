@@ -189,10 +189,10 @@ public class IRCBridge
         {
             ircType = IrcType.CRAFT_IRC;
         }
-        else if (classExists(""))
-        {
-            ircType = IrcType.FORGE_IRC;
-        }
+//        else if (classExists(""))
+//        {
+//            ircType = IrcType.FORGE_IRC;
+//        }
         else if (classExists("blay09.mods.eirairc.EiraIRC"))
         {
             ircType = IrcType.EIRA_IRC;
