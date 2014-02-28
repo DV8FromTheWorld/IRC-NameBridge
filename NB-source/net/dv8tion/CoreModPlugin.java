@@ -5,6 +5,7 @@ import java.util.Map;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.Name;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.MCVersion;
+import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 
 /**
  * Provides information for FML so that the proper pieces of
@@ -14,8 +15,9 @@ import cpw.mods.fml.relauncher.IFMLLoadingPlugin.MCVersion;
  * @version v1.0  2/26/2013
  * @MC.Version 1.6.4
  */
-@Name(value = "IRC NameBridge")
-@MCVersion(value = "1.6.4")
+@Name("IRC NameBridge")
+@MCVersion("1.6.4")
+@TransformerExclusions("net.dv8tion")
 public class CoreModPlugin implements IFMLLoadingPlugin
 {
     
