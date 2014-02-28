@@ -10,12 +10,6 @@ package net.dv8tion;
 public class NameLoader
 {
     /**
-     * Change this to be the names of the currently connected people
-     * in the IRC channel.
-     */
-    public static String[] nameArray = {"Austin", "DV8", "Auzie"};
-        
-    /**
      * Takes the provided String array of names and merges it with the
      *  array of names that is in the IRC.
      *  
@@ -23,12 +17,18 @@ public class NameLoader
      *              The names of the users currently on the Minecraft server.
      * @return
      *              Returns a String array containing MC usernames and IRC usernames.
+     * @throws Exception 
      */
-    public static String[] loadNames(String[] currentNames)
+    public static String[] loadNames(String[] currentNames) throws Exception
     {
-        String[] newNames = new String[currentNames.length + nameArray.length];
-        System.arraycopy(currentNames, 0, newNames, 0, currentNames.length);
-        System.arraycopy(nameArray, 0, newNames, currentNames.length, nameArray.length);
-        return newNames;
+        String[] nameArray = IRCBridge.getIRCUsernames();
+        if (nameArray != null)
+        {
+            String[] newNames = new String[currentNames.length + nameArray.length];
+            System.arraycopy(currentNames, 0, newNames, 0, currentNames.length);
+            System.arraycopy(nameArray, 0, newNames, currentNames.length, nameArray.length);
+            return newNames;
+        }
+        return currentNames;
     }
 }
