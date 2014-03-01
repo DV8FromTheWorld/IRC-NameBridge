@@ -3,16 +3,16 @@ package net.dv8tion;
 import java.util.Map;
 
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
-import cpw.mods.fml.relauncher.IFMLLoadingPlugin.Name;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.MCVersion;
+import cpw.mods.fml.relauncher.IFMLLoadingPlugin.Name;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 
 /**
  * Provides information for FML so that the proper pieces of
- *  the CoreMod can be loaded.
+ * the CoreMod can be loaded.
  * 
  * @author DV8FromTheWorld (Austin Keener)
- * @version v1.0  2/26/2013
+ * @version v1.0 2/26/2013
  * @MC.Version 1.6.4
  */
 @Name("IRC NameBridge")
@@ -20,7 +20,7 @@ import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 @TransformerExclusions("net.dv8tion")
 public class CoreModPlugin implements IFMLLoadingPlugin
 {
-    
+
     @Override
     @Deprecated
     public String[] getLibraryRequestClass()
@@ -31,23 +31,23 @@ public class CoreModPlugin implements IFMLLoadingPlugin
 
     /**
      * Provides the class name of the CoreMod's transformation class,
-     *  proceeded by the package name, if it is in one.
+     * proceeded by the package name, if it is in one.
      * 
      * @return
-     *          Returns:  net.dv8tion.ClassTransformer as a String array.
+     *         Returns: net.dv8tion.ClassTransformer as a String array.
      */
     @Override
     public String[] getASMTransformerClass()
     {
-        return new String[] {ClassTransformer.class.getName()};
+        return new String[] { ClassTransformer.class.getName() };
     }
-    
+
     /**
      * Provides the class name of the CoreMod's DummyContainer class,
-     *  proceeded by the package name, if it is in one.
-     *  
+     * proceeded by the package name, if it is in one.
+     * 
      * @return
-     *          Returns:  net.dv8tion.CoreModContainer as a String.
+     *         Returns: net.dv8tion.CoreModContainer as a String.
      */
     @Override
     public String getModContainerClass()
