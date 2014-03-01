@@ -1,11 +1,9 @@
 package net.dv8tion;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -14,22 +12,22 @@ import cpw.mods.fml.common.FMLLog;
 public class IRCBridge
 {
     private static IrcType ircType = null;
-    
+
     private static Collection craftIrcCollection = null;
     private static Collection eiraIrcCollection = null;
-    
+
     public enum IrcType
     {
         CRAFT_IRC, EIRA_IRC, FORGE_IRC, NONE;
     };
-    
+
     public static String[] getIRCUsernames() throws Exception
     {
         if (ircType == null)
         {
             determineIRCType();
         }
-        switch(ircType)
+        switch (ircType)
         {
             case CRAFT_IRC:
                 return craftIRCNames();
@@ -44,7 +42,7 @@ public class IRCBridge
                         + "trying to get names. :" + ircType);
         }
     }
-    
+
     private static String[] craftIRCNames()
     {
         ArrayList<String> nameList = new ArrayList<String>();
@@ -53,17 +51,15 @@ public class IRCBridge
             craftIRCSetup();
         }
         if (craftIrcCollection.size() > 0)
-        {            
+        {
             try
             {
                 for (Object object : craftIrcCollection)
                 {
                     nameList.addAll((List) object.getClass().getMethod("listUsers").invoke(object));
                 }
-            } 
-            catch (IllegalAccessException | IllegalArgumentException
-                    | InvocationTargetException | NoSuchMethodException
-                    | SecurityException e)
+            }
+            catch (Exception e)
             {
                 FMLLog.severe("%s Something went seriously wrong with the reflection in "
                         + "the craftIRCNames() method in IRCBridge.\n"
@@ -75,7 +71,7 @@ public class IRCBridge
         }
         return null;
     }
-    
+
     private static String[] eiraIRCNames()
     {
         ArrayList<String> nameList = new ArrayList<String>();
@@ -87,9 +83,9 @@ public class IRCBridge
         {
             Collection channels;
             Collection ircUsers;
-            try 
+            try
             {
-                for (Object ircConnection  : eiraIrcCollection)
+                for (Object ircConnection : eiraIrcCollection)
                 {
                     channels = (Collection) ircConnection.getClass().getMethod("getChannels").invoke(ircConnection);
                     for (Object channel : channels)
@@ -102,26 +98,24 @@ public class IRCBridge
                     }
                 }
             }
-            catch (IllegalAccessException | IllegalArgumentException
-                    | InvocationTargetException | NoSuchMethodException
-                    | SecurityException e)
+            catch (Exception e)
             {
                 FMLLog.severe("%s Something went seriously wrong with the reflection in "
-                        + "the eiraIRCNames() method in IRCBridge.\n"
+                        + "the craftIRCNames() method in IRCBridge.\n"
                         + "The Exception Message: %s\nThe Cause: %s",
                         "[IRC NameBridge]", e.getMessage(), e.getCause());
-                e.printStackTrace();   
+                e.printStackTrace();
             }
             return (String[]) nameList.toArray();
         }
         return null;
     }
-    
+
     private static String[] forgeIRCNames()
     {
         return null;
     }
-    
+
     private static void craftIRCSetup()
     {
         try
@@ -148,11 +142,8 @@ public class IRCBridge
             object = field.get(object);                                     //Gets the value for channels : MineBot.java
             map = (Map) object;                                             //Cast channels to a Map (it is one)
             craftIrcCollection = map.values();                              //Stores the values (no keys) from channels
-        } 
-        catch (ClassNotFoundException | NoSuchMethodException
-                | SecurityException | IllegalAccessException
-                | IllegalArgumentException | InvocationTargetException
-                | NoSuchFieldException e)
+        }
+        catch (Exception e)
         {
             FMLLog.severe("%s Something went seriously wrong with the reflection in "
                     + "the craftIRCSetup() method in IRCBridge.\n"
@@ -161,19 +152,16 @@ public class IRCBridge
             e.printStackTrace();
         }
     }
-    
-    private static void eiraIRCSetup() 
+
+    private static void eiraIRCSetup()
     {
         try
         {
             Object object;
             object = Class.forName("blay09.mods.eirairc.EiraIRC").getField("instance").get(null);
-            eiraIrcCollection =  (Collection) object.getClass().getMethod("getConnections").invoke(object);
+            eiraIrcCollection = (Collection) object.getClass().getMethod("getConnections").invoke(object);
         }
-        catch (NoSuchFieldException | SecurityException
-                | ClassNotFoundException | IllegalArgumentException
-                | IllegalAccessException | InvocationTargetException
-                | NoSuchMethodException e)
+        catch (Exception e)
         {
             FMLLog.severe("%s Something went seriously wrong with the reflection in "
                     + "the eiraIRCSetup() method in IRCBridge.\n"
@@ -182,9 +170,9 @@ public class IRCBridge
             e.printStackTrace();
         }
     }
-    
+
     private static void determineIRCType()
-    {  
+    {
         if (classExists("com.ensifera.animosity.craftirc.CraftIRC"))
         {
             ircType = IrcType.CRAFT_IRC;
@@ -202,7 +190,7 @@ public class IRCBridge
             ircType = IrcType.NONE;
         }
     }
-    
+
     private static boolean classExists(String fullClassPath)
     {
         try
