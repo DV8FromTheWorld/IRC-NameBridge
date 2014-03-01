@@ -1,0 +1,65 @@
+<?xml version="1.0" ?> 
+<project name="BuildMod" default="build" basedir=".">
+
+    <property file="build.properties" prefix="build"/>
+
+    <target name="clean">
+        <delete dir="${build.dir.mcp}\src\minecraft\${build.dir.mod.package}" />
+        <!-- 
+        <delete dir="${build.dir.mcp}\src\minecraft\assets" /> 
+        -->
+        <delete dir="${build.dir.mcp}\reobf\minecraft" />
+    </target>
+
+    <target name="increment_build_number">
+        <propertyfile file="build.properties">
+            <entry key="mod.build_number" type="int" operation="+" default="1"/>
+        </propertyfile>
+    </target>
+
+    <target name="prep">
+        <copy todir="${build.dir.mcp}\src\minecraft">
+            <fileset dir="${build.dir.mod.src}" />
+        </copy>
+    </target>
+
+    <target name="replace_tokens">
+        
+    </target>
+
+    <target name="recompile">
+       <exec dir="${build.dir.mcp}" executable="cmd" osfamily="windows">
+            <arg line="/c recompile.bat" />
+        </exec>
+        <exec dir="${build.dir.mcp}" executable="bash" osfamily="unix">
+            <arg line="recompile.sh" />
+        </exec> 
+    </target>
+
+    <target name="reobfuscate">
+       <exec dir="${build.dir.mcp}" executable="cmd" osfamily="windows">
+            <arg line="/c reobfuscate_srg.bat" />
+        </exec>
+        <exec dir="${build.dir.mcp}" executable="bash" osfamily="unix">
+            <arg line="reobfuscate_srg.sh" />
+        </exec>
+    </target>
+
+    <target name="build">
+        <!-- Prep for the build -->
+        <antcall target="clean" />
+        <antcall target="increment_build_number" />
+        <antcall target="prep" />
+        <antcall target="recompile" />      
+        <antcall target="reobfuscate" />
+        
+        <!-- Build the jar -->
+        <mkdir dir="${build.dir.build}\${build.mod.name}\${build.minecraft.version}" />
+        <jar destfile="${build.dir.build}\${build.mod.name}\${build.minecraft.version}\${build.mod.name}-${build.mod.version}_${build.mod.build_number}.jar" manifest="./MANIFEST.MF">
+            <fileset dir="${build.dir.mcp}\reobf\minecraft" />
+        </jar>
+        
+        <!-- Clean up the MCP source now that we are done -->
+        <antcall target="clean" />
+    </target>
+</project>
