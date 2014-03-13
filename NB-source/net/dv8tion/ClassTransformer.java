@@ -1,14 +1,12 @@
 package net.dv8tion;
 
-import static org.objectweb.asm.Opcodes.ARETURN;
-import static org.objectweb.asm.Opcodes.INVOKESTATIC;
-
 import java.util.Iterator;
 
 import net.minecraft.launchwrapper.IClassTransformer;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodInsnNode;
@@ -84,9 +82,9 @@ public class ClassTransformer implements IClassTransformer
     {
         String methodName = obfuscated ? "d" : "getAllUsernames";
 
-        ClassNode classNode = new ClassNode();
+        ClassNode classNode = new ClassNode(Opcodes.ASM4);
         ClassReader classReader = new ClassReader(classData);
-        classReader.accept(classNode, 0);
+        classReader.accept(classNode, ClassReader.EXPAND_FRAMES);
 
         Iterator<MethodNode> methods = classNode.methods.iterator();
         while (methods.hasNext())
@@ -106,7 +104,7 @@ public class ClassTransformer implements IClassTransformer
                     index++;
                     currentNode = iter.next();
 
-                    if (currentNode.getOpcode() == ARETURN)
+                    if (currentNode.getOpcode() == Opcodes.ARETURN)
                     {
                         arrayReturn_index = index;
                     }
@@ -114,17 +112,18 @@ public class ClassTransformer implements IClassTransformer
 
                 //Calls NameLoader.loadNames(String[]) 
                 m.instructions.insertBefore(m.instructions.get(arrayReturn_index), 
-                        new MethodInsnNode(INVOKESTATIC, "net/dv8tion/NameLoader",
+                        new MethodInsnNode(Opcodes.INVOKESTATIC, "net/dv8tion/NameLoader",
                         "loadNames", "([Ljava/lang/String;)[Ljava/lang/String;"));
 
                 System.out.println("[IRC NameBridge] Patching Complete!");
                 break;
             }
         }
-
         //ASM specific for cleaning up and returning the final bytes for JVM processing.
-        ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
+        //Use 0 here instead of like ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS because
+        //We need to have ASM recalculate things.  
+        ClassWriter writer = new ClassWriter(0);
         classNode.accept(writer);
-        return writer.toByteArray();
+        return writer.toByteArray();  
     }
 }
