@@ -26,6 +26,7 @@ public class IRCBridge
         if (ircType == null)
         {
             determineIRCType();
+            System.out.println("DETERMINE IRC FOUND: " + ircType);
         }
         switch (ircType)
         {
@@ -67,7 +68,7 @@ public class IRCBridge
                         "[IRC NameBridge]", e.getMessage(), e.getCause());
                 e.printStackTrace();
             }
-            return (String[]) nameList.toArray();
+            return nameList.toArray(new String[nameList.size()]);
         }
         return null;
     }
@@ -106,7 +107,7 @@ public class IRCBridge
                         "[IRC NameBridge]", e.getMessage(), e.getCause());
                 e.printStackTrace();
             }
-            return (String[]) nameList.toArray();
+            return nameList.toArray(new String[nameList.size()]);
         }
         return null;
     }
@@ -126,6 +127,8 @@ public class IRCBridge
             Field field;
             List list;
             Map map;
+            
+            //Gets the instance of CraftIRC from Bukkit's plugin manager
             clazz = Class.forName("org.bukkit.Bukkit");                     //get  Bukkit.java
             method = clazz.getMethod("getServer");                          //get  getServer() :  Bukkit.java
             object = method.invoke(null);                                   //call getServer() :  Bukkit.java     
@@ -133,12 +136,15 @@ public class IRCBridge
             object = method.invoke(object);                                 //call getPluginManager() : Server.java
             method = object.getClass().getMethod("getPlugin", String.class);//get  getPlugin(String)  : PluginManager.java
             object = method.invoke(object, "CraftIRC");                     //call getPlugin(String) : PluginManager
-            field = object.getClass().getField("instances");                //get  instances :   CraftIRC.java
+            
+            //Gets the reference to the Collection in CraftIRC that holds names.
+            field = object.getClass().getDeclaredField("instances");        //get  instances :   CraftIRC.java
             field.setAccessible(true);                                      //Make instances public
             object = field.get(object);                                     //Gets the value of instances : CraftIRC.java
             list = (List) object;                                           //Cast instances to a List (it is one)
             object = list.get(0);                                           //Gets the first MineBot.java instance.
-            field = object.getClass().getField("channels");                 //get  channels : MineBot.java
+            field = object.getClass().getDeclaredField("channels");         //get  channels : MineBot.java
+            field.setAccessible(true);                                      //Make channels public
             object = field.get(object);                                     //Gets the value for channels : MineBot.java
             map = (Map) object;                                             //Cast channels to a Map (it is one)
             craftIrcCollection = map.values();                              //Stores the values (no keys) from channels
@@ -173,7 +179,7 @@ public class IRCBridge
 
     private static void determineIRCType()
     {
-        if (classExists("com.ensifera.animosity.craftirc.CraftIRC"))
+        if (pluginExists("CraftIRC"))
         {
             ircType = IrcType.CRAFT_IRC;
         }
@@ -190,7 +196,27 @@ public class IRCBridge
             ircType = IrcType.NONE;
         }
     }
-
+    
+    private static boolean pluginExists(String pluginName)
+    {
+        try
+        {
+            Object object;
+            object = Class.forName("org.bukkit.Bukkit").getMethod("getServer").invoke(null);
+            object = object.getClass().getMethod("getPluginManager").invoke(object);
+            object = object.getClass().getMethod("getPlugin", String.class).invoke(object, pluginName);
+            if (object != null)
+            {
+                return true;
+            }
+            return false;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+    }
+    
     private static boolean classExists(String fullClassPath)
     {
         try
