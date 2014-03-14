@@ -19,7 +19,7 @@ import cpw.mods.fml.common.FMLLog;
  * </ul>
  * 
  * @author DV8FromTheWorld (Austin Keener)
- * @version v0.1.0 3/14/2013
+ * @version v0.1.0 3/14/2014
  * @MC.Version 1.6.4
  */
 public class IRCBridge
