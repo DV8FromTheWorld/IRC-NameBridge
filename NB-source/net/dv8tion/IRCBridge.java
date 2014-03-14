@@ -224,7 +224,7 @@ public class IRCBridge
      * Checks if the plugin exists.
      * Uses reflection to get Bukkit's PluginManager to find a plugin based 
      * on the name of the plugin.
-     * Note, this will only work if the we are using MCPC+ (because we need bukkit).
+     * Note, this will only work if the we are using <a href="https://github.com/MinecraftPortCentral/MCPC-Plus">MCPC+</a> (because we need bukkit).
      * 
      * @param pluginName
      *      The name of the plugin (This is the name that the Plugin registered with bukkit).
