@@ -16,7 +16,7 @@ import org.objectweb.asm.tree.MethodNode;
  * Provides functionality for ByteCode insertion.
  * 
  * @author DV8FromTheWorld (Austin Keener)
- * @version v1.0 2/26/2013
+ * @version v0.1.0 3/14/2013
  * @MC.Version 1.6.4
  */
 public class ClassTransformer implements IClassTransformer

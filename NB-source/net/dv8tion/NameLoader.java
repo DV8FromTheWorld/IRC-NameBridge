@@ -1,10 +1,10 @@
 package net.dv8tion;
 
 /**
- * Controls the loading of names of IRC users for Autocompletion in minecraft.
+ * Controls the loading of names of IRC users for Auto-Completion in minecraft.
  * 
  * @author DV8FromTheWorld (Austin Keener)
- * @version v1.0  2/26/2013
+ * @version v0.1.0  3/14/2013
  * @MC.Version 1.6.4
  */
 public class NameLoader

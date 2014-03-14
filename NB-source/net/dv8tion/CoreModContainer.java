@@ -18,7 +18,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
  * Has the ability to be shown in the Mods-List.
  * 
  * @author DV8FromTheWorld (Austin Keener)
- * @version v1.0 2/26/2013
+ * @version v0.1.0 3/14/2013
  * @MC.Version 1.6.4
  */
 public class CoreModContainer extends DummyModContainer
@@ -29,7 +29,7 @@ public class CoreModContainer extends DummyModContainer
         ModMetadata meta = getMetadata();
         meta.modId = "IRCNameBridge";
         meta.name = "IRC NameBridge";
-        meta.version = "0.0.1";
+        meta.version = "0.1.0";
         meta.credits = "Roll Credits ...";
         meta.authorList = Arrays.asList("DV8FromTheWorld");
         meta.description = "Provides the ability to Autocomplete names of people that are in IRC (CraftIRC, EiraIRC, ForgeIRC).";
