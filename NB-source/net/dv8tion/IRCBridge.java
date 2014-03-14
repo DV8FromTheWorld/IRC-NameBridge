@@ -9,10 +9,29 @@ import java.util.Map;
 
 import cpw.mods.fml.common.FMLLog;
 
+/**
+ * Provides functionality to retrieve names from IRC from specific mods.
+ * Supported mods are:
+ * <ul>
+ *  <li><a href="http://dev.bukkit.org/bukkit-plugins/craftirc/">CraftIRC 3</a>
+ *   - <b>REQUIRES <a href="http://dev.bukkit.org/bukkit-plugins/vault/">VAULT</a></b></li>
+ *  <li><a href="http://www.minecraftforum.net/topic/1964989-"><strike>EiraIRC</strike></a></li>
+ * </ul>
+ * 
+ * @author DV8FromTheWorld (Austin Keener)
+ * @version v0.1.0 3/14/2013
+ * @MC.Version 1.6.4
+ */
 public class IRCBridge
 {
     private static IrcType ircType = null;
 
+    /**
+     * These Collections store the references to the name lists that the respective
+     * mod/plugin uses to store the names.  They start out as null and are only 
+     * populated with a reference if the mod/plugin is present and the reflection
+     * that is executed in their setup method successfully finds their name lists.
+     */
     private static Collection craftIrcCollection = null;
     private static Collection eiraIrcCollection = null;
 
@@ -20,7 +39,7 @@ public class IRCBridge
     {
         CRAFT_IRC, EIRA_IRC, FORGE_IRC, NONE;
     };
-
+    
     public static String[] getIRCUsernames() throws Exception
     {
         if (ircType == null)
@@ -177,6 +196,10 @@ public class IRCBridge
         }
     }
 
+    /**
+     * Determines which IRC mod / plugin is installed.
+     * If none are installed, defaults to IrcType.NONE.
+     */
     private static void determineIRCType()
     {
         if (pluginExists("CraftIRC"))
@@ -197,6 +220,17 @@ public class IRCBridge
         }
     }
     
+    /**
+     * Checks if the plugin exists.
+     * Uses reflection to get Bukkit's PluginManager to find a plugin based 
+     * on the name of the plugin.
+     * Note, this will only work if the we are using MCPC+ (because we need bukkit).
+     * 
+     * @param pluginName
+     *      The name of the plugin (This is the name that the Plugin registered with bukkit).
+     * @return
+     *      True if the plugin is currently loaded.
+     */
     private static boolean pluginExists(String pluginName)
     {
         try
@@ -217,6 +251,14 @@ public class IRCBridge
         }
     }
     
+    /**
+     * Helper method that checks if a class exists.
+     * 
+     * @param fullClassPath
+     *      The class name, preceded by the package name.
+     * @return
+     *      True if the provided string points to an existing class.
+     */
     private static boolean classExists(String fullClassPath)
     {
         try
