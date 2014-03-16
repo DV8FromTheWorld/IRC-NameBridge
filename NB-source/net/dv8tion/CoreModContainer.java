@@ -1,5 +1,7 @@
 package net.dv8tion;
 
+import java.util.Arrays;
+
 import com.google.common.eventbus.EventBus;
 
 import cpw.mods.fml.common.DummyModContainer;
@@ -16,7 +18,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
  * Has the ability to be shown in the Mods-List.
  * 
  * @author DV8FromTheWorld (Austin Keener)
- * @version v0.1.0 3/14/2014
+ * @version v0.3.1 3/15/2014
  * @MC.Version 1.6.4
  */
 public class CoreModContainer extends DummyModContainer
@@ -24,7 +26,17 @@ public class CoreModContainer extends DummyModContainer
     public CoreModContainer()
     {
         super(new ModMetadata());
-        DataLib.loadMetadataFromFile(getClass().getResourceAsStream("/mcmod.info"), getMetadata());
+        ModMetadata metadata = getMetadata();
+        metadata.modId = DataLib.MOD_ID;
+        metadata.name = DataLib.MOD_NAME;
+        metadata.version = DataLib.VERSION;
+        metadata.credits = "Created by DV8FromTheWorld.";
+        metadata.authorList = Arrays.asList("DV8FromTheWorld");
+        metadata.description = "Provides the ability to Auto-complete names of people that are in IRC (CraftIRC, EiraIRC, ForgeIRC).";
+        metadata.url = "http://code.dv8tion.net";
+        metadata.updateUrl = "";
+        metadata.screenshots = new String[0];
+        metadata.logoFile = "";
     }
 
     @Override
