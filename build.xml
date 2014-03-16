@@ -58,6 +58,7 @@
         <mkdir dir="${build.dir.build}\${build.mod.name}\${build.minecraft.version}" />
         <jar destfile="${build.dir.build}\${build.mod.name}\${build.minecraft.version}\${build.mod.name}-${build.mod.version}_${build.mod.build_number}.jar" manifest="./MANIFEST.MF">
             <fileset dir="${build.dir.mcp}\reobf\minecraft" />
+			<fileset dir="." includes="LICENSE.txt" />
         </jar>
         
         <!-- Clean up the MCP source now that we are done -->
