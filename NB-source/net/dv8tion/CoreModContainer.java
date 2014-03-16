@@ -1,7 +1,5 @@
 package net.dv8tion;
 
-import java.util.Arrays;
-
 import com.google.common.eventbus.EventBus;
 
 import cpw.mods.fml.common.DummyModContainer;
@@ -26,17 +24,7 @@ public class CoreModContainer extends DummyModContainer
     public CoreModContainer()
     {
         super(new ModMetadata());
-        ModMetadata meta = getMetadata();
-        meta.modId = "IRCNameBridge";
-        meta.name = "IRC NameBridge";
-        meta.version = "0.1.0";
-        meta.credits = "Roll Credits ...";
-        meta.authorList = Arrays.asList("DV8FromTheWorld");
-        meta.description = "Provides the ability to Autocomplete names of people that are in IRC (CraftIRC, EiraIRC, ForgeIRC).";
-        meta.url = "code.dv8tion.net";
-        meta.updateUrl = "";
-        meta.screenshots = new String[0];
-        meta.logoFile = "";
+        DataLib.loadMetadataFromFile(getClass().getResourceAsStream("/mcmod.info"), getMetadata());
     }
 
     @Override
@@ -45,7 +33,7 @@ public class CoreModContainer extends DummyModContainer
         bus.register(this);
         return true;
     }
-
+    
     @EventHandler
     public void modConstruction(FMLConstructionEvent evt)
     {

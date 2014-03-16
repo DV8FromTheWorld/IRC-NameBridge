@@ -5,6 +5,7 @@
 
     <target name="clean">
         <delete dir="${build.dir.mcp}\src\minecraft\${build.dir.mod.package}" />
+		<delete file="${build.dir.mcp}\src\minecraft\mcmod.info" />
         <!-- 
         <delete dir="${build.dir.mcp}\src\minecraft\assets" /> 
         -->
@@ -13,7 +14,7 @@
 
     <target name="increment_build_number">
         <propertyfile file="build.properties">
-            <entry key="mod.build_number" type="int" operation="+" default="1"/>
+            <entry key="mod.build_number" type="int" operation="+" default="1" />
         </propertyfile>
     </target>
 
@@ -24,7 +25,8 @@
     </target>
 
     <target name="replace_tokens">
-        
+        <replace file="${build.dir.mcp}\src\minecraft\mcmod.info" token="@VERSION@" value="${build.mod.version}_${build.mod.build_number}" />
+		<replace file="${build.dir.mcp}\src\minecraft\mcmod.info" token="@MCVERSION@" value="${build.minecraft.version}" />
     </target>
 
     <target name="recompile">
@@ -50,6 +52,7 @@
         <antcall target="clean" />
         <antcall target="increment_build_number" />
         <antcall target="prep" />
+		<antcall target="replace_tokens" />
         <antcall target="recompile" />      
         <antcall target="reobfuscate" />
         
@@ -57,6 +60,7 @@
         <mkdir dir="${build.dir.build}\${build.mod.name}\${build.minecraft.version}" />
         <jar destfile="${build.dir.build}\${build.mod.name}\${build.minecraft.version}\${build.mod.name}-${build.mod.version}_${build.mod.build_number}.jar" manifest="./MANIFEST.MF">
             <fileset dir="${build.dir.mcp}\reobf\minecraft" />
+			<fileset dir="${build.dir.mcp}\src\minecraft\" includes="mcmod.info" />
         </jar>
         
         <!-- Clean up the MCP source now that we are done -->

@@ -1,0 +1,17 @@
+[
+{
+  "modid": "NameBridge",
+  "name": "IRC NameBridge",
+  "version": "@VERSION@",
+  "mcversion": "@MCVERSION@",
+  "description": "Provides the ability to Auto-complete names of people that are in IRC (CraftIRC, EiraIRC, ForgeIRC).",
+  "credits": "Created by DV8FromTheWorld.",
+  "url": "http://code.dv8tion.net",
+  "authors": [ "DV8FromTheWorld" ],
+  "parent":"",  
+  "updateUrl": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
